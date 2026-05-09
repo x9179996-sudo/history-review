@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>115會考歷史 · 跟著老師走一遍</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700&family=Noto+Sans+TC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #1a1814;
+  --ink-mid: #4a4640;
+  --ink-soft: #8a8480;
+  --ink-ghost: #c8c4be;
+  --paper: #f5f2ec;
+  --paper-warm: #ede9e0;
+  --paper-card: #faf8f4;
+  --accent: #c07830;
+  --accent-light: #f0e4d0;
+  --accent-dark: #8a5420;
+  --ok: #3a7a50;
+  --ok-light: #d8eed4;
+  --retry: #9a3a30;
+  --retry-light: #f0dcd8;
+  --serif: 'Noto Serif TC', serif;
+  --sans: 'Noto Sans TC', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+.header {
+  background: var(--paper-card);
+  border-bottom: 1px solid var(--ink-ghost);
+  padding: 20px 24px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-top {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.header-top h1 {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+}
+
+.header-top .sub {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.tabs {
+  display: flex;
+  gap: 0;
+}
+
+.tab-btn {
+  padding: 10px 20px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  bottom: -1px;
+}
+
+.tab-btn:hover { color: var(--ink); }
+
+.tab-btn.active {
+  color: var(--accent-dark);
+  border-bottom: 2px solid var(--accent);
+  font-weight: 500;
+}
+
+.progress-bar {
+  height: 2px;
+  background: var(--ink-ghost);
+  margin-top: 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+.main {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 32px 20px 0;
+}
+
+.stats-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.stat-pill {
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: var(--paper-warm);
+  font-size: 12px;
+}
+
+.stat-pill.ok { background: var(--ok-light); color: var(--ok); }
+.stat-pill.retry { background: var(--retry-light); color: var(--retry); }
+
+.q-card {
+  background: var(--paper-card);
+  border: 1px solid var(--ink-ghost);
+  border-radius: 4px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+  border-left-width: 1px;
+}
+
+.q-card.marked-ok { border-left: 3px solid var(--ok); }
+.q-card.marked-retry { border-left: 3px solid var(--retry); }
+
+.q-header {
+  padding: 20px 24px 16px;
+}
+
+.q-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.q-num {
+  font-size: 11px;
+  color: var(--ink-ghost);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+
+.q-section {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 2px;
+  background: var(--accent-light);
+  color: var(--accent-dark);
+  font-weight: 500;
+}
+
+.q-text {
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+.q-hint {
+  font-size: 12px;
+  color: var(--ink-ghost);
+  margin-top: 12px;
+}
+
+.reveal-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 24px 20px;
+  padding: 10px 18px;
+  border: 1px solid var(--ink-ghost);
+  border-radius: 3px;
+  background: transparent;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink-mid);
+  cursor: pointer;
+  transition: all 0.15s;
+  width: fit-content;
+}
+
+.reveal-btn:hover {
+  background: var(--paper-warm);
+  border-color: var(--ink-soft);
+  color: var(--ink);
+}
+
+.reveal-icon {
+  width: 15px;
+  height: 15px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.answer-block {
+  display: none;
+  padding: 0 24px 20px;
+  border-top: 1px solid var(--paper-warm);
+  margin-top: 0;
+}
+
+.answer-block.open { display: block; }
+
+.answer-inner {
+  border-left: 2px solid var(--accent);
+  padding: 12px 0 12px 16px;
+  margin-top: 16px;
+  margin-bottom: 14px;
+}
+
+.answer-label {
+  font-size: 11px;
+  color: var(--ink-soft);
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.yt-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 3px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background 0.15s;
+  font-family: var(--sans);
+}
+
+.yt-link:hover { background: var(--ink-mid); }
+
+.yt-icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+.self-check {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.check-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 3px;
+  border: 1px solid var(--ink-ghost);
+  background: transparent;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink-mid);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.check-btn:hover { background: var(--paper-warm); }
+.check-btn.active-ok { background: var(--ok-light); border-color: var(--ok); color: var(--ok); font-weight: 500; }
+.check-btn.active-retry { background: var(--retry-light); border-color: var(--retry); color: var(--retry); font-weight: 500; }
+
+.done-wrap { display: none; margin-bottom: 24px; }
+.done-wrap.visible { display: block; }
+
+.done-banner {
+  background: var(--paper-card);
+  border: 1px solid var(--ink-ghost);
+  border-radius: 4px;
+  padding: 36px 28px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.done-title {
+  font-family: var(--serif);
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.done-sub {
+  font-size: 14px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+  margin-bottom: 22px;
+}
+
+.done-quote {
+  font-size: 14px;
+  color: var(--ink-mid);
+  line-height: 1.8;
+  border-left: 2px solid var(--accent);
+  padding-left: 16px;
+  text-align: left;
+}
+
+.done-quote cite {
+  display: block;
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-top: 6px;
+  font-style: normal;
+}
+
+.retry-section {
+  background: var(--retry-light);
+  border: 1px solid rgba(154,58,48,0.3);
+  border-radius: 4px;
+  padding: 20px 24px;
+}
+
+.retry-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--retry);
+  margin-bottom: 12px;
+}
+
+.retry-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  color: var(--ink);
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(154,58,48,0.12);
+  line-height: 1.5;
+  gap: 12px;
+}
+
+.retry-item:last-child { border-bottom: none; }
+
+.retry-item span { flex: 1; }
+
+.retry-item a {
+  font-size: 12px;
+  color: var(--retry);
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.retry-item a:hover { text-decoration: underline; }
+
+@media (max-width: 500px) {
+  .header { padding: 14px 16px 0; }
+  .header-top h1 { font-size: 15px; }
+  .tab-btn { padding: 10px 14px; font-size: 13px; }
+  .main { padding: 22px 14px 0; }
+  .q-header { padding: 16px 18px 14px; }
+  .q-text { font-size: 15px; }
+  .reveal-btn { margin: 0 18px 16px; }
+  .answer-block { padding: 0 18px 16px; }
+  .done-banner { padding: 28px 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <h1>115會考歷史 · 跟著老師走一遍</h1>
+    <span class="sub">宜蓉老師</span>
+  </div>
+  <div class="tabs" id="tabs"></div>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+</div>
+
+<div class="main" id="main"></div>
+
+<script>
+const DB = {
+  taiwan: {
+    videoId: 'FvY4hQWdfcs',
+    items: [
+      { section: '史前時代', t: 124,
+        q: '舊石器時代和新石器時代，最關鍵的差別是什麼？台灣分別有哪些代表文化？' },
+      { section: '原住民政策', t: 326,
+        q: '清帝國對原住民的政策，在什麼事件前後有了根本的轉變？「劃界封山」到「開山撫番」的關鍵是？' },
+      { section: '原住民政策', t: 456,
+        q: '日治時期和戰後，原住民政策各自如何演變？' },
+      { section: '大航海時代', t: 548,
+        q: '看到「北部、基隆淡水、天主教、馬尼拉、十七世紀」這幾個關鍵字，你要聯想到誰？鄭氏政權又和哪些勢力往來？' },
+      { section: '清末開港通商', t: 736,
+        q: '英法聯軍後台灣開港，最重要的三個出口商品是什麼？各從哪個港口出去？' },
+      { section: '日治建設', t: 963,
+        q: '日治時期為了讓台灣財政自給自足，推行了哪些專賣制度？留下了哪些重要的基礎建設？' },
+      { section: '戰後外交', t: 1202,
+        q: '戰後台灣的外交遭遇了哪些重大挫折？這帶來了什麼社會反應？' },
+      { section: '戰後經濟', t: 1432,
+        q: '戰後台灣的經濟發展，從四○到七○年代各有什麼關鍵轉折？' }
+    ]
+  },
+  china: {
+    videoId: 'MArsDCCyheY',
+    items: [
+      { section: '選官制度', t: 108,
+        q: '從漢朝到隋唐，選拔人才的制度怎麼一路演變？察舉制、九品官人法、科舉各自有什麼問題？' },
+      { section: '北魏漢化', t: 349,
+        q: '北魏孝文帝的漢化政策做了哪些具體的事？帶來什麼正面和負面的影響？' },
+      { section: '宋元時期', t: 441,
+        q: '宋朝怎麼和遼維持百年和平？蒙古帝國靠什麼讓東西貿易暢通？後來又發生了什麼事？' },
+      { section: '清末三次改革', t: 681,
+        q: '從鴉片戰爭到八國聯軍，清朝進行了哪三次改革？各自的觸發事件和改革重點是什麼？' },
+      { section: '皇族內閣與革命', t: 901,
+        q: '日俄戰爭後，清朝的立憲運動為什麼最終失敗，反而促成了辛亥革命的爆發？' },
+      { section: '兩次國共合作', t: 996,
+        q: '兩次國共合作的背景分別是什麼？各為了對付誰？' },
+      { section: '抗日戰爭', t: 1216,
+        q: '中日戰爭從哪個事件開始？國民政府採取了什麼戰略因應軍事上的劣勢？' },
+      { section: '東協', t: 1289,
+        q: '冷戰格局下，東南亞國家為什麼選擇成立東協，而不加入美國主導的東南亞公約組織？' }
+    ]
+  },
+  world: {
+    videoId: 'CnO1C7dTySU',
+    items: [
+      { section: '上古文明', t: 42,
+        q: '亞歷山大東征創造了什麼新時代？羅馬帝國滅亡後，留下了哪些持續影響歐洲的遺產？' },
+      { section: '三大宗教', t: 443,
+        q: '佛教、基督教、伊斯蘭教的創立順序是什麼？伊斯蘭教在歐洲的哪個地區留下了深刻的文化痕跡？' },
+      { section: '文藝復興與啟蒙', t: 621,
+        q: '文藝復興和啟蒙運動的核心精神有什麼不同？各自有哪些代表性的思想主張？' },
+      { section: '工業革命', t: 955,
+        q: '工業革命除了帶來都市化，還造成什麼社會問題？又催生了哪些新的政治思想？' },
+      { section: '第一次世界大戰', t: 1386,
+        q: '一戰的本質是什麼？戰後巴黎和會對德國做了什麼，又倡議成立了什麼組織、為何效果有限？' },
+      { section: '戰間期', t: 1654,
+        q: '一戰後到二戰前，全球經歷了什麼嚴重的經濟危機？各國的應對方式有何不同？' }
+    ]
+  }
+};
+
+const TABS = [
+  { key: 'taiwan', label: '臺灣史' },
+  { key: 'china',  label: '中國／東亞史' },
+  { key: 'world',  label: '世界史' }
+];
+
+let currentTab = 'taiwan';
+const state = {};
+
+function initState(tab) {
+  if (!state[tab]) {
+    state[tab] = DB[tab].items.map(() => ({ open: false, mark: null }));
+  }
+}
+
+function ytUrl(videoId, t) {
+  return 'https://www.youtube.com/watch?v=' + videoId + '&t=' + t;
+}
+
+function buildTabs() {
+  const wrap = document.getElementById('tabs');
+  wrap.innerHTML = TABS.map(t =>
+    '<button class="tab-btn' + (t.key === currentTab ? ' active' : '') +
+    '" id="tab-' + t.key + '" onclick="switchTab(\'' + t.key + '\')">' + t.label + '</button>'
+  ).join('');
+}
+
+function render() {
+  const tab = currentTab;
+  initState(tab);
+  const { videoId, items } = DB[tab];
+  const s = state[tab];
+  const total = items.length;
+  const opened = s.filter(x => x.open).length;
+  const okCount = s.filter(x => x.mark === 'ok').length;
+  const retryCount = s.filter(x => x.mark === 'retry').length;
+  const allMarked = s.every(x => x.mark !== null);
+
+  document.getElementById('progress-fill').style.width =
+    Math.round((opened / total) * 100) + '%';
+
+  let html = '';
+
+  // stats
+  html += '<div class="stats-row">';
+  html += '<span>' + opened + ' / ' + total + ' 題已查看</span>';
+  if (okCount > 0) html += '<span class="stat-pill ok">✓ 懂了 ' + okCount + '</span>';
+  if (retryCount > 0) html += '<span class="stat-pill retry">↩ 再聽 ' + retryCount + '</span>';
+  html += '</div>';
+
+  // done banner
+  if (allMarked) {
+    html += '<div class="done-wrap visible">';
+    html += '<div class="done-banner">';
+    html += '<div class="done-title">這段順完了</div>';
+    if (retryCount === 0) {
+      html += '<div class="done-sub">全部都懂了。繼續往下一個主題。</div>';
+    } else {
+      html += '<div class="done-sub">有 ' + retryCount + ' 個地方標了再聽。<br>直接點連結跳回那段聽一次，再回來。</div>';
+    }
+    html += '<div class="done-quote">你至今所累積的一切不會背叛你，<br>讀過的書都在大腦裡，發揮最好的狀態就好了。';
+    html += '<cite>— 宜蓉老師</cite></div>';
+    html += '</div>';
+
+    if (retryCount > 0) {
+      html += '<div class="retry-section">';
+      html += '<div class="retry-title">需要再聽的段落</div>';
+      items.forEach((item, i) => {
+        if (s[i].mark === 'retry') {
+          html += '<div class="retry-item">';
+          html += '<span>' + item.section + '・' + item.q.slice(0, 20) + '…</span>';
+          html += '<a href="' + ytUrl(videoId, item.t) + '" target="_blank">→ 跳到影片</a>';
+          html += '</div>';
+        }
+      });
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+
+  // cards
+  items.forEach((item, i) => {
+    const st = s[i];
+    let cls = 'q-card';
+    if (st.mark === 'ok') cls += ' marked-ok';
+    if (st.mark === 'retry') cls += ' marked-retry';
+
+    html += '<div class="' + cls + '" id="card-' + i + '">';
+    html += '<div class="q-header">';
+    html += '<div class="q-meta"><span class="q-num">Q' + (i+1) + '</span><span class="q-section">' + item.section + '</span></div>';
+    html += '<div class="q-text">' + item.q + '</div>';
+    if (!st.open) html += '<div class="q-hint">想好了再往下 ↓</div>';
+    html += '</div>';
+
+    if (!st.open) {
+      html += '<button class="reveal-btn" onclick="reveal(' + i + ')">';
+      html += '<svg class="reveal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>';
+      html += '我想好了，聽老師說這段';
+      html += '</button>';
+    } else {
+      html += '<div class="answer-block open">';
+      html += '<div class="answer-inner">';
+      html += '<div class="answer-label">老師的解說</div>';
+      html += '<a class="yt-link" href="' + ytUrl(videoId, item.t) + '" target="_blank">';
+      html += '<svg class="yt-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>';
+      html += '跳到影片 · ' + item.section;
+      html += '</a>';
+      html += '</div>';
+      html += '<div class="self-check">';
+      html += '<button class="check-btn' + (st.mark==='ok' ? ' active-ok' : '') + '" onclick="mark(' + i + ',\'ok\')">✓ 懂了</button>';
+      html += '<button class="check-btn' + (st.mark==='retry' ? ' active-retry' : '') + '" onclick="mark(' + i + ',\'retry\')">↩ 再聽一次</button>';
+      html += '</div>';
+      html += '</div>';
+    }
+
+    html += '</div>';
+  });
+
+  document.getElementById('main').innerHTML = html;
+}
+
+function reveal(i) {
+  initState(currentTab);
+  state[currentTab][i].open = true;
+  render();
+  setTimeout(() => {
+    const el = document.getElementById('card-' + i);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 60);
+}
+
+function mark(i, val) {
+  initState(currentTab);
+  state[currentTab][i].mark = val;
+  render();
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  buildTabs();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  render();
+}
+
+buildTabs();
+render();
+</script>
+</body>
+</html>
